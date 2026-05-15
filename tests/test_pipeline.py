@@ -724,10 +724,11 @@ class AssemblyTests(unittest.TestCase):
         ]
         assembly = quads_to_masm16(quads, {"add": ["a", "b"], "main": []})
 
-        self.assertIn("add:", assembly)
+        self.assertIn("fn_add:", assembly)
+        self.assertNotIn("\nadd:", assembly)
         self.assertIn("MOV AX,ss:[bp+4]", assembly)
         self.assertIn("ADD AX,ss:[bp+6]", assembly)
-        self.assertIn("CALL add", assembly)
+        self.assertIn("CALL fn_add", assembly)
         self.assertIn("MOV AX,2", assembly)
         self.assertIn("MOV AX,3", assembly)
         self.assertIn("PUSH AX", assembly)
@@ -995,6 +996,36 @@ class LogAutomataTests(unittest.TestCase):
 
         self.assertEqual([], result.matches)
         self.assertIn("No log keywords matched", result.format_matches())
+
+
+class SubmissionExportTests(unittest.TestCase):
+    def test_generates_txt_int_and_doc_for_test_cases(self):
+        from pathlib import Path
+
+        from compiler.submission_export import generate_submission_package
+
+        base = Path("outputs") / "unit_submission_export"
+        input_dir = base / "input"
+        output_dir = base / "output"
+        input_dir.mkdir(parents=True, exist_ok=True)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        source = "int main() {\n    int x;\n    x = 1 + 2;\n    return x;\n}\n"
+        (input_dir / "test0.1.txt").write_text(source, encoding="utf-8")
+        (input_dir / "note.txt").write_text("not a test case", encoding="utf-8")
+
+        generated = generate_submission_package(input_dir, output_dir)
+
+        self.assertEqual(["test0.1"], [item.stem for item in generated])
+        self.assertEqual(source, (output_dir / "test0.1.txt").read_text(encoding="utf-8"))
+        int_text = (output_dir / "test0.1.int").read_text(encoding="utf-8")
+        self.assertIn("========== TOKEN 序列 ==========", int_text)
+        self.assertIn("========== AST ==========", int_text)
+        self.assertIn("========== 中间代码（四元式） ==========", int_text)
+        self.assertIn("========== MASM16 汇编程序代码 ==========", int_text)
+        self.assertIn("main:", int_text)
+        doc_text = (output_dir / "test0.1.doc").read_text(encoding="utf-8")
+        self.assertTrue(doc_text.startswith("{\\rtf1"))
+        self.assertIn("test0.1", doc_text)
 
 
 if __name__ == "__main__":

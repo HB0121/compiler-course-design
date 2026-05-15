@@ -2,5 +2,8 @@ Variable Name | Type
 --- | ---
 a | int
 b | int
-i | int
-total | int
+c | int
+d | int
+x | int
+y | int
+z | int
