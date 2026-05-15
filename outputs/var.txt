@@ -1,0 +1,5 @@
+Variable Name | Type
+--- | ---
+x | int
+a | int
+b | int

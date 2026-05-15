@@ -1,0 +1,14 @@
+LLVM Verify
+Internal verifier: PASS
+External tools:
+- llvm-as: not found
+- lli: not found
+Manual commands:
+  llvm-as outputs/llvm_ir.ll -o outputs/llvm_ir.bc
+  lli outputs/llvm_ir.ll
+  clang -c outputs/llvm_ir.ll -o outputs/llvm_ir.obj
+  clang outputs/llvm_ir.ll -o outputs/llvm_ir.exe
+  outputs\llvm_ir.exe
+- clang -c: PASS
+warning: overriding the module target triple with x86_64-pc-windows-msvc19.51.36243 [-Woverride-module]
+1 warning generated.
