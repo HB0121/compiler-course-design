@@ -1,24 +1,29 @@
 Line | Target Code | Meaning
 --- | --- | ---
-1 | FUNC square | enter function square
-2 | LOAD R1, x | load x into register R1
-3 | MUL R1, x | R1 = R1 * x
-4 | STORE t1, R1 | t1 = R1
-5 | RET t1 | return t1
-6 | RET 0 | return 0
-7 | FUNC main | enter function main
-8 | MOV a, 4 | a = 4
-9 | ; para a _ _ | comment or skipped helper instruction
-10 | ; call square _ t2 | comment or skipped helper instruction
-11 | MOV b, t2 | b = t2
-12 | JG b, 10, L11 | if b > 10, jump to L11
-13 | JMP L14 | jump to L14
-14 | L11: | label L11: jump target
-15 | ; para b _ _ | comment or skipped helper instruction
-16 | ; call write _ t3 | comment or skipped helper instruction
-17 | JMP L16 | jump to L16
-18 | L14: | label L14: jump target
-19 | ; para 0 _ _ | comment or skipped helper instruction
-20 | ; call write _ t4 | comment or skipped helper instruction
-21 | L16: | label L16: jump target
-22 | END | program end
+1 | MOV limit, 3 | limit = 3
+2 | FUNC add | enter function add
+3 | LOAD R1, a | load a into register R1
+4 | ADD R1, b | R1 = R1 + b
+5 | STORE t1, R1 | t1 = R1
+6 | RET t1 | return t1
+7 | RET 0 | return 0
+8 | FUNC main | enter function main
+9 | MOV i, 0 | i = 0
+10 | MOV total, 0 | total = 0
+11 | L8: | label L8: jump target
+12 | JL i, limit, L10 | if i < limit, jump to L10
+13 | JMP L17 | jump to L17
+14 | L10: | label L10: jump target
+15 | ; para total _ _ | comment or skipped helper instruction
+16 | ; para i _ _ | comment or skipped helper instruction
+17 | ; call add _ t2 | comment or skipped helper instruction
+18 | MOV total, t2 | total = t2
+19 | LOAD R1, i | load i into register R1
+20 | ADD R1, 1 | R1 = R1 + 1
+21 | STORE t3, R1 | t3 = R1
+22 | MOV i, t3 | i = t3
+23 | JMP L8 | jump to L8
+24 | L17: | label L17: jump target
+25 | ; para total _ _ | comment or skipped helper instruction
+26 | ; call write _ t4 | comment or skipped helper instruction
+27 | END | program end
